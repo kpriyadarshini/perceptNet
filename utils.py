@@ -137,7 +137,7 @@ def find_margin(model, train_list, device):
 		y3 = model(batch_x3)
 	
    		dist_12 = F.pairwise_distance(y1, y2, p=2) 
-    	dist_13 = F.pairwise_distance(y1, y3, p=2)
+    		dist_13 = F.pairwise_distance(y1, y3, p=2)
 		margin = dist_13 - dist_12
 		margin = margin.cpu().data.numpy()
 		
@@ -155,21 +155,21 @@ def find_margin(model, train_list, device):
 
 def find_ecl_margin(train_list, device):	
 	hm_margin, lm_margin = [],[]
-    label = [x[3] for x in train_list]
-    feature1 = [x[0] for x in train_list]
+	label = [x[3] for x in train_list]
+	feature1 = [x[0] for x in train_list]
    	feature2 = [x[1] for x in train_list]
-    feature3 = [x[2] for x in train_list]    	
-    feature1 = torch.FloatTensor(feature1)
-    feature2 = torch.FloatTensor(feature2)
-    feature3 = torch.FloatTensor(feature3)
-    
-    dist_12 = F.pairwise_distance(feature1, feature2, p=2)
-    dist_13 = F.pairwise_distance(feature1, feature3, p=2)
+	feature3 = [x[2] for x in train_list]
+	feature1 = torch.FloatTensor(feature1)
+	feature2 = torch.FloatTensor(feature2)
+	feature3 = torch.FloatTensor(feature3)
+	
+	dist_12 = F.pairwise_distance(feature1, feature2, p=2)
+	dist_13 = F.pairwise_distance(feature1, feature3, p=2)
 	margin_all = dist_13 - dist_12
 	margin_all = margin_all.cpu().data.numpy()
  	# now calculate the loss
-    for tr in range(len(train_list)):
-    	if label[tr] == 1:
+    	for tr in range(len(train_list)):
+    		if label[tr] == 1:
 			hm_margin.append(margin_all[tr])
 		else:
 			lm_margin.append(margin_all[tr])
@@ -321,18 +321,18 @@ def precision_recall(test_list, model, device, n_div):
 def precision_recall_ecl(test_list, n_div):
 	recall_hm, precision_hm = [],[]	
 	hm_margin, lm_margin = [],[]
-    label = [x[2] for x in test_list]
-    feature1 = [x[0] for x in test_list]
+    	label = [x[2] for x in test_list]
+    	feature1 = [x[0] for x in test_list]
    	feature2 = [x[1] for x in test_list]
-    feature1 = torch.FloatTensor(feature1)
-    feature2 = torch.FloatTensor(feature2)
-    dist_12 = F.pairwise_distance(feature1, feature2, p=2)
+    	feature1 = torch.FloatTensor(feature1)
+    	feature2 = torch.FloatTensor(feature2)
+    	dist_12 = F.pairwise_distance(feature1, feature2, p=2)
  	margin_all = dist_12.cpu().data.numpy()	
 	for tr in range(len(test_list)):
     	if label[tr] == 1:
-			hm_margin.append(margin_all[tr])
-		else:
-			lm_margin.append(margin_all[tr])
+		hm_margin.append(margin_all[tr])
+	else:
+		lm_margin.append(margin_all[tr])
 	dist_margin = np.concatenate((hm_margin, lm_margin), axis=0)
 	max_margin = max(dist_margin)
 	min_margin = min(dist_margin)
