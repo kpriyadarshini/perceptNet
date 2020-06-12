@@ -49,12 +49,13 @@ def train(model, optimizer, device, args):
 	for epoch in range(args.start_epochs, args.max_epochs):
 		#tick = time.time()	
 		train_dataloader = DataLoader(train_list, batch_size=BATCH_SIZE, shuffle=True, num_workers=1)
+		
 		for batchidx, (batch_x1, batch_x2, batch_x3, batch_ind) in enumerate(train_dataloader):
-	    	batch_x1 =  torch.unsqueeze(batch_x1.float().to(device), 1)
-	    	batch_x2 =  torch.unsqueeze(batch_x2.float().to(device), 1)
-	    	batch_x3 =  torch.unsqueeze(batch_x3.float().to(device), 1)
-	    	batch_ind = batch_ind.float().to(device)
-	    	embedded_x1 = model(batch_x1)
+			batch_x1 =  torch.unsqueeze(batch_x1.float().to(device), 1)
+			batch_x2 =  torch.unsqueeze(batch_x2.float().to(device), 1)
+			batch_x3 =  torch.unsqueeze(batch_x3.float().to(device), 1)
+			batch_ind = batch_ind.float().to(device)
+			embedded_x1 = model(batch_x1)
 			embedded_x2 = model(batch_x2)
 			embedded_x3 = model(batch_x3)
 			
@@ -77,7 +78,7 @@ def train(model, optimizer, device, args):
 		lmLossPerEpoch.append(avgLmLoss)
 	    # print('training: d_itr: %d epoch: %d loss per epoch: %f ' %(inr, epoch, avgTrainLoss))	
 		
-		n_div = 70
+		n_div = 70 
 		with torch.no_grad():
 			hm_margin, lm_margin = find_margin(model, train_list, device)
 			hm_acc, lm_acc, acc, th = findThreshold(hm_margin, lm_margin, n_div)
