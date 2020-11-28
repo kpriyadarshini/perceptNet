@@ -132,10 +132,9 @@ def find_margin(model, train_list, device):
 		batch_x1 = torch.unsqueeze(batch_x1,1)
 		batch_x2 = torch.unsqueeze(batch_x2,1)
 		batch_x3 = torch.unsqueeze(batch_x3,1)
-		y1 = model(batch_x1)
-		y2 = model(batch_x2)
-		y3 = model(batch_x3)
-	
+		inp = torch.cat([batch_x1, batch_x2, batch_x3])
+    		y = model(inp.to(device))
+    		[y0,y1,y2] = torch.chunk(y,3)
    		dist_12 = F.pairwise_distance(y1, y2, p=2) 
     		dist_13 = F.pairwise_distance(y1, y3, p=2)
 		margin = dist_13 - dist_12
