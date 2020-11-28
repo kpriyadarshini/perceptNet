@@ -11,12 +11,12 @@ Experiments are performed for three test cases in order of increasing difficulty
 
 For each case, the training and test triplets are present for five random train/test splits in the data folder.
 
-## Install
+## Requirements
 The model is implemented in PyTorch. Please install other Python libraries using requirements.txt
 
 `$pip install -r requirements.txt`
 
-## Train
+## Train Model
 
 Specify the data directory and results directory in train.py
 
