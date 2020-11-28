@@ -29,7 +29,7 @@ kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 LEARNING_RATE = 1e-4
 BATCH_SIZE = 128
 d_itr = 5
-save_dir = '/home/SharedData/priyadarshini/'
+save_dir = ''
 train_triplet_dictList = np.load('./data/exp3/train_triplet_dictList_exp3_0.npy')
 test_triplet_dictList = np.load('./data/exp3/test_triplet_dictList_exp3_0.npy')
 feature_cqfb = np.load('./data/feature_cqfb.npy')
@@ -55,9 +55,9 @@ def train(model, optimizer, device, args):
 			batch_x2 =  torch.unsqueeze(batch_x2.float().to(device), 1)
 			batch_x3 =  torch.unsqueeze(batch_x3.float().to(device), 1)
 			batch_ind = batch_ind.float().to(device)
-			embedded_x1 = model(batch_x1)
-			embedded_x2 = model(batch_x2)
-			embedded_x3 = model(batch_x3)
+			inp = torch.cat([batch_x1, batch_x2, batch_x3])
+    			y = model(inp.to(device))
+    			[y0,y1,y2] = torch.chunk(y,3)
 			
 			#compute loss 
 			hm_loss, lm_loss = tripletLoss(embedded_x1, embedded_x2, embedded_x3, batch_ind)
